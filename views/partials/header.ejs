@@ -1,20 +1,31 @@
-<header>
+<header id="header">
   <div v-if="user">
-    Hi {{user.email}}
-
-    <ul>
-      <li><a href='/user'>User page</a></li>
-      <li><a href='/auth/logout'>Logout</a></li>
+    <ul class="nav justify-content-center">
+      <li class="nav-item" ><a class="nav-link" href='/user'>User page</a></li>
+      <li class="nav-item"><a class="nav-link" href='/auth/logout'>Logout</a></li>
 
   </div>
   <div v-else>
-    <li class="nav-item">
-      <a class="nav-link" href="/auth/login"><i class="fa fa-sign-in" aria-hidden="true"></i>
-        Login</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/auth/register"><i class="fa fa-wpforms" aria-hidden="true"></i>
-        Register</a>
-    </li>
+    <ul class="nav justify-content-center">
+          <li class="nav-item">
+            <a class="nav-link" href="/auth/login"><i class="fa fa-sign-in" aria-hidden="true"></i>
+              Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/auth/register"><i class="fa fa-wpforms" aria-hidden="true"></i>
+              Register</a>
+          </li>
+    </ul>
   </div>
 </header>
+
+<script>
+  new Vue({
+    el:'#header',
+    data:{
+      test:'Header is a vue component'
+
+    }
+  })
+</script>
+

@@ -22,11 +22,16 @@ router.post('/login',
 
 
 router.get('/login', (req, res) => {
-  res.render('login')
+  res.render('login', {
+    title:'Login'
+  })
 
 })
 router.get('/register', (req, res) => {
-  res.render('register')
+  res.render('register', {
+    title: 'Register'
+
+  })
 
 })
 router.get('/logout', RM.ensure_authenticated, (req, res) => {
@@ -35,12 +40,6 @@ router.get('/logout', RM.ensure_authenticated, (req, res) => {
   res.redirect('/')
 })
 
-/* GET home page. */
-.get('/login', [RM.ensure_authenticated], function (req, res, next) {
-  res.render('login', {
-    title: 'Login',
-    layout: "_.ejs"
-  });
-});
+
 
 module.exports = router;

@@ -25,6 +25,7 @@ const use_middleware = require('./middleware/use.js')
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth/index.js');
+const apiRouter = require('./routes/api.js');
 
 
 const app = express();
@@ -47,13 +48,12 @@ const RM = require('./middleware/route_middleware.js')
 
 
 
-
-
 //Routers
 app.use('/', indexRouter);
 //Passport auth
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
+app.use('/api', apiRouter)
 
 
 

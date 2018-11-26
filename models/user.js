@@ -11,11 +11,14 @@ User.create_user = create_user
 User.compare_password = compare_password
 User.get_user_by_email = get_user_by_email
 User.get_user_by_id = get_user_by_id
+User.get_user_collections = get_user_collections
 
 
 
+  async function get_user_collections(id){
+    await User.findById(id, {collections:1})
 
-// const methods = {
+  }
   async function get_user_by_id (id, cb) {
     await User.findById(id, cb)
   }
@@ -54,4 +57,3 @@ User.get_user_by_id = get_user_by_id
       }
     });
   }
-// }

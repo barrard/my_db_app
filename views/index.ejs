@@ -1,5 +1,67 @@
+<div class="container-fluid">
+  <div class='row justify-content-center'>
+    <h2>Create your own database!</h2>
+  </div>
 
 
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
 
+
+
+  <div class='row justify-content-center'>
+    <div class='col-md-3 card m-3'>
+      <div class='row justify-content-center'>
+        <strong>Create a collections of items</strong>
+      </div>
+      <br>
+
+      <div class='row justify-content-center'>
+        <code>
+          Collection = "items"
+        </code>
+      </div>
+
+    </div>
+
+    <div class='col-md-3 card m-3'>
+      <div class='row justify-content-center'>
+        <strong>design your own models</strong>
+      </div>
+      <br>
+      <div class='row justify-content-center'>
+        <code>
+          { 
+            name:String,<br>
+            count:Number,<br>
+            updated:Date
+
+          }
+        </code>
+      </div>
+
+
+
+    </div>
+    <div class='col-md-3 card m-3 '>
+      <div class='row justify-content-center'>
+        <strong>create your own queries</strong>
+      </div>
+      <br>
+      <div class='row justify-content-center'>
+        <code>db.items.find({name:'candybar'})</code>
+      </div>
+
+    </div>
+  </div>
+  <hr>
+  <div class='row'>
+    <div class='col-sm-12'>
+      <div class='row justify-content-center'>
+        <p><a href='/auth/login'>Login</a> or <a href='/auth/register'>Register</a> to get started</p>
+
+      </div>
+
+
+    </div>
+  </div>
+
+</div>

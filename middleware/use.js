@@ -73,6 +73,7 @@ module.exports = (app)=>{
     }
   }));
   app.use((req, res, next) => {
+    res.locals.csrf_token_function = req.csrfToken
     res.locals.user = req.user || null;
     res.locals.session_messages = req.session.messages
     req.session.messages = []
