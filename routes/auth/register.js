@@ -57,7 +57,7 @@ module.exports = async function(req, res){
         let user = await User.create_user(new_user)
         logger.log(user)
         passport.authenticate('local', {
-          failureRedirect: '/register',
+          failureRedirect: '/auth/register',
           //WTF IS THIS MADNESS
         })(req, res, function () {
 
@@ -66,7 +66,7 @@ module.exports = async function(req, res){
           // req.session.email_token = token
           // sendgrid.verify_email(email, req.session.email_token, process.env.VERIFY_EMAIL_URL)
           //////////////TODO  Wrap this in a function somewhere ///////////////////////////
-          res.redirect('/');
+          res.redirect('/user/collections');
           // res.redirect('/account-profile');
         })
       }
@@ -74,7 +74,7 @@ module.exports = async function(req, res){
       logger.log('err'.bgRed)
       logger.log(err)
       req.session.messages.push({ 'danger': `Sorry an error occured trying to register ${email}` })
-      res.redirect('/register');
+      res.redirect('/auth/register');
 
     }
   }

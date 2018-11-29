@@ -11,14 +11,48 @@ User.create_user = create_user
 User.compare_password = compare_password
 User.get_user_by_email = get_user_by_email
 User.get_user_by_id = get_user_by_id
-User.get_user_collections = get_user_collections
+User.update_email = update_email
+User.update_password = update_password
 
 
+async function update_email({ user_id, email }){
+  try {
+    //verify email not already in use
+    let user = await get_user_by_email(email)
+    if (user) throw 'email is already in use'
 
-  async function get_user_collections(id){
-    await User.findById(id, {collections:1})
-
+    let updated_user = await User.findByIdAndUpdate(user_id, {
+      $set: { email: email }
+    })
+    if (!updated_user) throw 'Error updating email'
+    return updated_user
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    throw err    
   }
+
+}
+
+async function update_password({ user_id, update_password, confirm_password }){
+  try {
+    if (update_password != confirm_password) throw 'Passwords do not match'
+    let salt = await bcrypt.genSalt(10)
+    let hash = await bcrypt.hash(update_password, salt)
+    let saved_user = User.findByIdAndUpdate(user_id, {
+      $set:{password:hash}
+    })
+    if(!saved_user) throw 'Err updating user password'
+    return saved_user
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    throw err
+  }
+
+}
+
+
   async function get_user_by_id (id, cb) {
     await User.findById(id, cb)
   }

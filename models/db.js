@@ -11,6 +11,9 @@ mongoose.connect(db_uri, { useNewUrlParser: true })
   })
   //prevents a deprecation warning
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
+
+
 
 
 

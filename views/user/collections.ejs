@@ -1,0 +1,33 @@
+<script src="/js/components/collection_model_view.js"></script>
+<script src="/js/components/collection_list_view.js"></script>
+<script src="/js/components/collection_edit_buttons.js"></script>
+<script src="/js/components/collection_model_editing_and_building.js"></script>
+<script src="/js/components/collection_dynamic_input.js"></script>
+<script src="/js/components/collection_CRUD.js"></script>
+
+
+
+<div class="container">
+  <div class='row justify-content-center'>
+      <div class='col-sm-3'>
+        <collection-list-view 
+          @collection_selected="set_selected_collection" 
+          :collections="collections" 
+        />
+      </div>
+      <div class='col-sm-9'>
+        <div class='row justify-content-center'>
+          <h1>Manage Collections</h1>
+        </div>
+          <collection-model-view
+            :selected_collection="selected_collection"
+            @delete_collection="delete_collection"
+            @add_model_property="add_model_property"
+          />
+      </div>
+  </div>
+
+</div>
+
+  <% include ./modals/add_new_collection %>
+

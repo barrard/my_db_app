@@ -22,8 +22,8 @@ const use_middleware = require('./middleware/use.js')
 // const Local_Strategy = require('passport-local').Strategy;
 
 
-const indexRouter = require('./routes/index');
-const userRouter = require('./routes/user');
+const indexRouter = require('./routes/index.js');
+const userRouter = require('./routes/user/index.js');
 const authRouter = require('./routes/auth/index.js');
 const apiRouter = require('./routes/api.js');
 
@@ -32,7 +32,9 @@ const app = express();
 const User = require('./models/user.js')
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', [path.join(__dirname, 'views'),
+                  path.join(__dirname, 'views/user')
+                ]);
 app.set('view engine', 'ejs');
 app.set('layout', 'layouts/main');
 
