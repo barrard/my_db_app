@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const MODEL_PROP_TYPES = [
-  'String', 'Number', 'Boolean', 'Date'
+  'Text', 'Long Text', 'True/False', 'Date', 'Number'
 ]
 
 const collection_schema = mongoose.Schema({
@@ -104,9 +104,11 @@ async function delete_collection({ collection_id }) {
 async function verify_owner_of_collection({ collection_id, user_id }) {
   try {
     let collections = await get_user_collections({ user_id })
+    // logger.log(collections)
     let index_of_collection_id = collections.findIndex((col) => {
       return col._id == collection_id
     })
+    // logger.log(index_of_collection_id)
     if (index_of_collection_id < 0) return false
     return true
   } catch (err) {
@@ -145,8 +147,8 @@ async function add_collection({ user_id, collection_name, add_starter_model }) {
     var model = []
     if (add_starter_model === "yes") {
       model = [
-        { Name: "String" },
-        { Description: "String" },
+        { Name: "Text" },
+        { Description: "Long Text" },
         { Created: "Date" },
         { Updated: "Date" },
       ]

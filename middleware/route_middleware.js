@@ -10,6 +10,14 @@ module.exports = {
     res.redirect('/auth/login')
 
   },
+  ensure_not_authenticated(req, res, next) {
+    if (!req.isAuthenticated()) {
+      return next();
+    }
+    logger.log('This person is logged in'.bgWhite)
+    res.redirect('/user/collections')
+
+  },
   async ensure_user_collection(req, res, next){
     try {
       let method = req.method
@@ -25,13 +33,12 @@ module.exports = {
         logger.log(req.query)
         collection_id = req.query.collection_id
       }
-      logger.log(collection_id)
+      // logger.log({collection_id, user_id})
       if (!collection_id) throw 'ERROR'
-      logger.log('TODO set this up')
       //check this id beloings to a collection this user has
       let check = await Collection.verify_owner_of_collection({ collection_id, user_id})
       if (!check) throw 'Not this user collection'
-      logger.log(check)
+      // logger.log(check)
       next()
     } catch (err) {
       logger.log('err'.bgRed)

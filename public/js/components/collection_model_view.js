@@ -26,17 +26,10 @@ Vue.component('collection-model-view', {
             <div class="jumbotron jumbotron-fluid">
               <div class="container-fluid">
                 <h1 class="display-4">{{selected_collection.collection_name}}</h1>
-                <strong>Data Model</strong><br>
-                  <code>{</code>
-                  <br>
-                  ${/* index is the array number, key is the prop name, data type obj */''}
-                  <code v-for="(key, index) in selected_collection.model">
-                    ${/* index is the array number, key is the prop name, data type obj */''}
-                    <code v-for="(val, prop) in key">
-                     {{prop}} :  {{val}} <br>
-                    </code>
-                  </code>                
-                  <code>}</code>
+                <create-read-update-delete 
+                  :selected_collection="selected_collection"
+                />
+                <hr>
          
                 <model-editing-and-building 
                   :selected_collection="selected_collection"
@@ -44,9 +37,7 @@ Vue.component('collection-model-view', {
                 />
               </div>
             </div>
-            <create-read-update-delete 
-              :selected_collection="selected_collection"
-            />
+
           </div>${/* v-else selected_collection = true */''}
 
         </div>

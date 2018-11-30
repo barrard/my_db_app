@@ -9,13 +9,13 @@ const passport = require('passport')
 
 
 /* GET */
-router.get('/login', (req, res) => {
+router.get('/login', [RM.ensure_not_authenticated], (req, res) => {
   res.render('login', {
     title:'Login'
   })
 
 })
-router.get('/register', (req, res) => {
+router.get('/register', [RM.ensure_not_authenticated], (req, res) => {
   res.render('register', {
     title: 'Register'
 
@@ -29,15 +29,15 @@ router.get('/logout', RM.ensure_authenticated, (req, res) => {
 })
 
 /* POST */
-router.post('/register', async (req, res) => {
+router.post('/register', [RM.ensure_not_authenticated], async (req, res) => {
   require('./register.js')(req, res)
 })
 
 
 router.post('/login',
-  passport.authenticate('local', {
+  [RM.ensure_not_authenticated,passport.authenticate('local', {
     failureRedirect: '/auth/login',
-  }),
+  })],
   (req, res) => {
     require('./login.js')(req, res)
   });

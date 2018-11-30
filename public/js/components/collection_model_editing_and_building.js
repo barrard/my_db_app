@@ -2,7 +2,7 @@ let model_building_vue =  Vue.component('model-editing-and-building', {
   data: function () {
     return {
       data_types: [
-        'String', 'Number', 'Boolean', 'Date'
+        'Text', 'Long Text', 'True/False', 'Date', 'Number'
       ],
       new_model_property: '',
       new_model_property_type:''
@@ -20,7 +20,7 @@ let model_building_vue =  Vue.component('model-editing-and-building', {
 
   template: /*html*/`
 
-  <form>
+  <form id="model_editing_form">
     <div class='row justify-content-center'>
       <div class='col-sm-6'>
         <div class="form-group">

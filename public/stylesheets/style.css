@@ -16,3 +16,28 @@
   border-color: #dc3545;
   box-shadow: 0 0px 25px -5px #dc3545, inset 0 0px 46px -15px #dc3545;
 }
+
+
+.minimize{
+  display: none;
+  /* overflow: hidden;
+  height: 0%;
+  transition: height 0.5s ease-in-out; */
+  /* animation:  5000ms ease-in-out;
+  animation-name: minimize_animation;
+  animation-duration: 0.5s; 
+  animation-iteration-count: 10;
+  animation-timing-function: ease-in-out; 
+  animation-fill-mode: forwards; 
+  animation-delay: 0s;  */
+}
+
+/* @keyframes minimize_animation {
+  from {
+    height: 100%;
+  }
+  to {
+    height: 0%;
+
+  }
+} */

@@ -3,7 +3,8 @@ var router = express.Router();
 const RM = require('../../middleware/route_middleware.js')
 let User = require('../../models/user.js')
 const Collection = require('../../models/collections.js')
-// const Collection_model = require('../../models/collection_models.js')
+const User_collection_data = require('../../models/user_collection_data.js')
+
 
 
 
@@ -28,6 +29,29 @@ router.get('/', (req, res)=>{
 //     res.send({ err })
 //   }
 // });
+
+
+/* POST add obj to collection */
+router.post('/submit_data_to_collection', [RM.ensure_user_collection], async function (req, res, next) {
+  try {
+    logger.log(req.body)
+    //remove _csrf, collection_id, collection_name
+    let data = {...req.body}
+    let user_id = req.user._id
+    delete data._csrf
+    delete data.collection_id
+    delete data.collection_name
+
+    let { collection_id, collection_name } = req.body
+    let new_user_collection_data = await User_collection_data.add_user_collection({ collection_id, collection_name, user_id, data})
+    res.send({new_user_collection_data})
+
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    res.send({ err })
+  }
+});
 
 /* POST add a new collection */
 router.post('/update_collection_model', [RM.ensure_user_collection], async function (req, res, next) {
