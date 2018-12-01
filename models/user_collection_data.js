@@ -98,7 +98,7 @@ async function add_user_collection({ collection_id, collection_name, data, user_
 
 async function verify_submited_document_is_comple({collection_id, data}){
   try {
-    var model = await Collectons.get_model({ collection_id })
+    var model = await Collections.get_model({ collection_id })
     logger.log(model)
     logger.log(data)
     let model_varified_data={}
