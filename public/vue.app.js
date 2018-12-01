@@ -2,15 +2,7 @@
 console.log('app.js')
 const vue_app = new Vue({
   el: '#app',
-  data: {
-    user,
-    update_password: '',
-    confirm_password: '',
-    new_collection_name:'',
-    add_starter_model:'yes',
-    collections:collections,
-    selected_collection:null,
-  },
+  data: $tore,
   methods:{
     async submit_update_email() {
       try {

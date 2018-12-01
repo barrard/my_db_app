@@ -29,15 +29,23 @@ Collection.get_user_collections = get_user_collections
 Collection.verify_owner_of_collection = verify_owner_of_collection
 Collection.delete_collection = delete_collection
 Collection.update_collection_model = update_collection_model
+Collection.get_model = get_model
+Collection.get_collection = get_collection
+Collection.delete_model_prop = delete_model_prop
+Collection.edit_new_prop = edit_new_prop
+
+
+
+
 
 async function update_collection_model({ new_model_property, new_model_property_type, collection_id }) {
   try {
     logger.log(`Save Id ${collection_id} and Prop ${new_model_property} and data type${new_model_property_type}`)
     let valid = await validate_new_model_property({ new_model_property, new_model_property_type, collection_id })
     if (valid !== true) throw valid//if not true, this will be error message
-    let data = { [new_model_property]: new_model_property_type}
+    let data = { [new_model_property]: new_model_property_type }
     logger.log(collection_id)
-    let saved_collection_model = await Collection.findOneAndUpdate({_id:collection_id}, {
+    let saved_collection_model = await Collection.findOneAndUpdate({ _id: collection_id }, {
       $push: { model: data }
     }, { new: true })
     if (!saved_collection_model) throw 'Error updating model'
@@ -70,7 +78,7 @@ async function validate_new_model_property({ new_model_property, new_model_prope
     logger.log('DUPLICATE NAME'.red)
     err_msg += `This property "${new_model_property}" already exists on the model <br>`
   }
-  //verify the data type is coming form our list
+  //verify the data type is coming from our list
   let data_type_ok = MODEL_PROP_TYPES.indexOf(new_model_property_type)
   if (data_type_ok < 0) {
     err_msg += `Data type "${new_model_property_type}" is invalid`
@@ -119,6 +127,68 @@ async function verify_owner_of_collection({ collection_id, user_id }) {
   }
 }
 
+async function edit_new_prop({
+  collection_id, 
+  old_prop_name, old_prop_type, 
+  new_prop_name, new_prop_type}){
+    try {
+      let collection = await Collection.findById(collection_id)
+      let prop_index = collection.model.findIndex(prop_obj => {
+        logger.log(prop_obj)
+        for (let key in prop_obj) {
+          logger.log(key)
+          return key == old_prop_name
+        }
+      });
+      if(prop_index < 0)throw `${old_prop_name} not found while trying to update property`
+      logger.log(prop_index)
+      let prop_data = {[new_prop_name]: new_prop_type}
+      logger.log(prop_data)
+      logger.log('old'.green)
+      logger.log(collection.model[prop_index])
+      collection.model[prop_index] = prop_data
+      logger.log('new'.green)
+      logger.log(collection.model[prop_index])
+      collection.markModified('model')
+      var saved = await collection.save()
+      logger.log('saved'.green)
+
+      logger.log(saved)
+      let new_prop_obj = saved.model[prop_index]
+      return new_prop_obj
+    } catch (err) {
+      logger.log('err'.bgRed)
+      logger.log(err)
+      throw err
+    }
+
+
+  }
+
+async function delete_model_prop({ collection_id, prop }) {
+  try {
+    let collection = await Collection.findById(collection_id)
+    if (!collection) throw `Collection not found, cannot delete ${prop}`
+    let prop_index = collection.model.findIndex(prop_obj => {
+      logger.log(prop_obj)
+      for (let key in prop_obj) {
+        logger.log(key)
+        return key == prop
+      }
+    });
+    if (prop_index < 0) throw `${prop} not found on this model`
+    collection.model.splice(prop_index, 1)
+
+    logger.log(collection)
+    let saved_collection = await collection.save()
+    return saved_collection.model
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    throw err
+  }
+}
+
 
 async function get_user_collections({ user_id }) {
   try {
@@ -138,6 +208,7 @@ async function add_collection({ user_id, collection_name, add_starter_model }) {
     let col = await Collection.findOne({
       user_id, collection_name
     })
+    //They have this same collection in the trash (deleted = true)
     if (col && col.deleted) {
       throw `You have a Collection saved in your deleted collections named ${collection_name}\n
                 Would yo like to restore? <button>yes</button> `
@@ -164,4 +235,27 @@ async function add_collection({ user_id, collection_name, add_starter_model }) {
     logger.log(err)
     throw err
   }
+}
+
+async function get_model({ collection_id }) {
+  try {
+    var collection = await get_collection({ collection_id })
+    return collection.model
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    throw err
+  }
+}
+async function get_collection({ collection_id }) {
+  try {
+    var collection = await Collection.findById(collection_id)
+    if (!collection) throw 'No collection found'
+    return collection
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    throw err
+  }
+
 }

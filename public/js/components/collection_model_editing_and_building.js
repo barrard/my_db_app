@@ -24,7 +24,7 @@ let model_building_vue =  Vue.component('model-editing-and-building', {
     <div class='row justify-content-center'>
       <div class='col-sm-6'>
         <div class="form-group">
-          <label for="new property name">Model Property</label>
+          <label for="new property name">Model Property Title</label>
           <input type="text" class="form-control" v-model="new_model_property" id="new_property_input" placeholder="Name">
           <small class="form-text text-muted">Name, Type, Quantiy, Location, etc...</small>
         </div>

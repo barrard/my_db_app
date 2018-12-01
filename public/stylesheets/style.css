@@ -16,6 +16,27 @@
   border-color: #dc3545;
   box-shadow: 0 0px 25px -5px #dc3545, inset 0 0px 46px -15px #dc3545;
 }
+.relative{
+  position: relative;
+}
+.flex{
+  display: flex;
+} 
+.inline{
+  display: inline;
+}
+.align-center{
+  align-items: center;
+}
+
+.prop-edit-btns{
+  /* position: absolute; */
+}
+.top_right_btns{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 
 
 .minimize{

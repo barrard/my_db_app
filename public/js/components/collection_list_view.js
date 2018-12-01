@@ -24,15 +24,16 @@ const list_vue = Vue.component('collection-list-view', {
         </button>
       </div>
       <div class='row justify-content-center'>
-        <strong>Collections - {{collections.length}}</strong>
+      <h3>Your Collections</h3> <br><hr>
+        <strong>Total = {{collections.length}}</strong>
       </div>
         <div class='row justify-content-center'>
           <ul v-if="collections.length" class="list-group">
             <li  
-              v-for="collection in collections" 
+              v-for="(collection, index) in collections" 
               @click.prevent="collection_selected(collection)" 
               class="list-group-item text-align-center clickable">
-                {{collection.collection_name}}
+                {{index+1}} - {{collection.collection_name}}
             </li>
           </ul>
           <div v-if="!collections.length">
