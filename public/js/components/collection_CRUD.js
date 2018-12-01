@@ -39,14 +39,22 @@ Vue.component('create-read-update-delete', {
   methods: {
 
     async submit_verified_data(data) {
-      console.log(data)
-      let collection_id = this.selected_collection._id
-      let collection_name = this.selected_collection.collection_name
-      console.log({ data, _csrf, collection_id, collection_name })
-      let resp = await $.post('/user/submit_data_to_collection', {
-        ...data, _csrf, collection_id, collection_name
-      })
-      console.log(resp)
+      try {
+        console.log(data)
+        let collection_id = this.selected_collection._id
+        let collection_name = this.selected_collection.collection_name
+        console.log({ data, _csrf, collection_id, collection_name })
+        let resp = await $.post('/user/submit_data_to_collection', {
+          ...data, _csrf, collection_id, collection_name
+        })
+        console.log(resp)
+        if(resp.err)throw resp.err
+        toast({msg:'Data submited succesfully', type:'success'})
+      } catch (err) {
+        console.log('err'.bgRed)
+        console.log(err)
+        toast({msg:err, type:'error'})
+      }
     },
     verify_data() {
       //Get all values from the form
@@ -74,6 +82,7 @@ Vue.component('create-read-update-delete', {
         }
 
       });
+      // if(!Object.keys(data).length)err_msg += 'Data is empty! <br>'
       if (err_msg) {
         return toast({ msg: err_msg, type: 'error' })
       }

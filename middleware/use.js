@@ -79,6 +79,8 @@ module.exports = (app)=>{
     req.session.messages = []
     res.locals.csrf_token_function = req.csrfToken
     res.locals.collections = null//place holder local variable
+    res.locals.collection_documents = null//place holder local variable
+    
     next()
   })
 

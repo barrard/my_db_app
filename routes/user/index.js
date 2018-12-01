@@ -59,6 +59,19 @@ router.post('/edit_new_prop', [RM.ensure_user_collection], async function (req, 
 });
 
 
+/* POST add obj to collection */
+router.get('/get_collection_documents', [RM.ensure_user_collection], async function (req, res, next) {
+  try {
+    let {collection_id} = req.query
+    let collection_documents = await User_collection_data.get_collection_documents({collection_id})
+    res.send({collection_documents})
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    res.send({ err })
+  }
+});
+
 
 /* POST add obj to collection */
 router.post('/submit_data_to_collection', [RM.ensure_user_collection], async function (req, res, next) {
@@ -70,6 +83,8 @@ router.post('/submit_data_to_collection', [RM.ensure_user_collection], async fun
     delete data._csrf
     delete data.collection_id
     delete data.collection_name
+
+    if(!Object.keys(data).length)throw 'Data is empty'
 
     let { collection_id, collection_name } = req.body
     let new_user_collection_data = await User_collection_data.add_user_collection({ collection_id, collection_name, user_id, data })

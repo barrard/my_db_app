@@ -38,6 +38,7 @@ $tore={
   add_starter_model: 'yes',
   collections: collections,
   selected_collection: null,
-  edit_mode: true
+  edit_mode: true,
+  collection_documents:[]
 }
 

@@ -60,6 +60,13 @@ const vue_app = new Vue({
         console.log('collection selcteed')
         this.selected_collection = selected_collection
         console.log(this.selected_collection)
+        let collection_id = this.selected_collection._id
+        //get collection_documents
+        let resp = await $.get('/user/get_collection_documents', {
+          collection_id
+        })
+        if(resp.err)throw resp.err
+        $tore.collection_documents = resp.collection_documents
 
       } catch (err) {
         console.log('err')

@@ -15,10 +15,27 @@ const user_collection_data_schema = mongoose.Schema({
  }
 })
 
-const User_Collection_data = mongoose.model('user_Collection_data', user_collection_data_schema)
+const User_Collection_data = mongoose.model('user_collection_data', user_collection_data_schema)
 User_Collection_data.add_user_collection = add_user_collection
+User_Collection_data.get_collection_documents = get_collection_documents
 
 module.exports = User_Collection_data
+
+
+async function get_collection_documents({ collection_id }) {
+  try {
+    let collection_data = await User_Collection_data.find({collection_id})
+    if(!collection_data) throw 'Cannot find any colelction data'
+    return collection_data
+    
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    throw err
+  }
+
+}
+
 
 
 async function add_user_collection({ collection_id, collection_name, data, user_id }) {
