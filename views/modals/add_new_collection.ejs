@@ -12,7 +12,12 @@
         <form>
           <div class="form-group">
             <label for="exampleInputEmail1">Collection Name</label>
-            <input v-model="new_collection_name" type="text" class="form-control" aria-describedby="collection name"
+            <input 
+              id="new_collection_name_input"
+              
+              v-model="new_collection_name" 
+              type="text" class="form-control" 
+              aria-describedby="collection name"
               placeholder="Collection Name">
             <small class="form-text text-muted">Ex. Employees, Customers, Inventory</small>
           </div>

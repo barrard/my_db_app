@@ -1,7 +1,40 @@
 const User = require('../models/user.js')
 const Collection = require('../models/collections.js')
+const User_collection_data = require('../models/user_collection_data.js')
 
 module.exports = {
+  async ensure_user_document(req, res, next){
+    // if(true) return next()
+    try {
+      let method = req.method
+      logger.log(method)
+      var document_id;
+      const user_id = req.user._id
+      if (method == "POST") {
+        logger.log('POST')
+        document_id = req.body.document_id
+      }
+      if (method == "GET") {
+        logger.log('GET')
+        logger.log(req.query)
+        document_id = req.query.document_id
+      }
+      // logger.log({collection_id, user_id})
+      if (!document_id) throw 'ERROR no document_id'
+      //check this id beloings to a collection this user has
+      let check = await User_collection_data.verify_owner_of_document({ document_id, user_id})
+      if (!check) throw 'Not this user collection'
+      // logger.log(check)
+      next()
+
+    } catch (err) {
+      logger.log('err'.bgRed)
+      logger.log(err)
+      res.send({err:'Cannot edit this document'})
+
+    }
+
+  },
   ensure_authenticated(req, res, next) {
     if (req.isAuthenticated()) {
       return next();

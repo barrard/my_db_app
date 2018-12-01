@@ -114,7 +114,7 @@ async function verify_owner_of_collection({ collection_id, user_id }) {
     let collections = await get_user_collections({ user_id })
     // logger.log(collections)
     let index_of_collection_id = collections.findIndex((col) => {
-      return col._id == collection_id
+      return col._id.equals(collection_id)
     })
     // logger.log(index_of_collection_id)
     if (index_of_collection_id < 0) return false

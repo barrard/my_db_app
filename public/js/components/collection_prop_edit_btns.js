@@ -18,14 +18,14 @@ Vue.component('prop-edit-btns', {
             <button 
               @click="delete_prop"
               type="button" 
-              class="btn btn-primary btn-sm">
-                X
+              class="btn btn-danger btn-sm">
+              <i class="icon-trash"></i>
               </button>
             <button 
               type="button" 
               @click="edit_prop_mode"
               class="btn btn-secondary btn-sm">
-                EDIT
+              <i class="icon-cog"></i>
               </button>
           </div>
 

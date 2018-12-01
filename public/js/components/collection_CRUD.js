@@ -50,6 +50,7 @@ Vue.component('create-read-update-delete', {
         console.log(resp)
         if(resp.err)throw resp.err
         toast({msg:'Data submited succesfully', type:'success'})
+        $tore.collection_documents.push(resp.new_user_collection_data)
       } catch (err) {
         console.log('err'.bgRed)
         console.log(err)

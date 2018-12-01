@@ -19,24 +19,25 @@ Vue.component('collection-edit-buttons', {
             @click.prevent="delete_collection(collection_id)" 
             type="button" 
             title="Move Collection to Trash"
-            class="btn btn-warning">
-            X
+            class="btn btn-danger">
+            <i class="icon-trash"></i>
           </button>
           <button 
             @click="toggle_edit_form" 
             type="button" 
-            :class="edit_form ? 'btn-success' : 'btn-danger' " 
+            :class="edit_form ? 'btn-success' : 'btn-outline-info' " 
             :title="edit_form ? 'Edit mode enabled' : 'Edit mode diabled' "
             class="btn">
-              EDIT
+            <i class="icon-cogs"></i>
+
           </button>
           <button 
             @click="toggle_create_data_form" 
             type="button" 
-            :class="create_data_form ? 'btn-success' : 'btn-danger' " 
+            :class="create_data_form ? 'btn-success' : 'btn-outline-info' " 
             :title="create_data_form ? 'Create mode enabled' : 'Create mode diabled' "
             class="btn">
-              CREATE
+            <i class="icon-code"></i>
           </button>
   
 

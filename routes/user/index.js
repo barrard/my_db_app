@@ -29,6 +29,30 @@ router.get('/', (req, res) => {
 //     res.send({ err })
 //   }
 // });
+router.post('/trash_document', [RM.ensure_user_document], async function(req, res, next){
+  try {
+    logger.log('TEST')
+    res.send('test')
+    
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    res.send({ err })
+  }
+
+});
+
+router.post('/edit_document', [RM.ensure_user_document], async function(req, res, next){
+  try {
+    logger.log('TEST')
+    res.send('test')
+    
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    res.send({ err })
+  }
+});
 
 
 /* POST add obj to collection */

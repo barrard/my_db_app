@@ -90,13 +90,13 @@ Vue.component('dynamic-input', {
               type="button" 
               @click="save_new_prop"
               class="btn btn-sm btn-primary">
-                SAVE
+              SAVE <i class="ml-2 icon-save"></i>
             </button>
             <button 
               type="button" 
               @click="cancel_prop_edit_mode"
               class="btn btn-sm btn-secondary">
-                CANCEL
+              CANCEL<i class="ml-2 icon-ban-circle"></i>
             </button>
           </div>
         </div>

@@ -115,12 +115,15 @@ const vue_app = new Vue({
           this.collections.push(resp.new_collection)
           let name = resp.new_collection.collection_name
           toast({ msg: `Collection <strong>${name}</strong> added`, type: 'success' })
+          $('.new-collection-modal-lg').modal('hide')
+          $tore.selected_collection = resp.new_collection
 
         }
 
       } catch (err) {
         console.log('err')
         console.log(err)
+        $('#new_collection_name_input').addClass('is_invalid')
         toast({msg:err, type:'error'})
       }
     },

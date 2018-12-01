@@ -20,11 +20,11 @@ const list_vue = Vue.component('collection-list-view', {
           data-toggle="modal" 
           data-target=".new-collection-modal-lg" 
           type="button" class="btn btn-primary">
-            + New Collection
+          <i class="icon-plus"></i> New Collection
         </button>
       </div>
       <div class='row justify-content-center'>
-      <h3>Your Collections</h3> <br><hr>
+      <h3>Your Collections <i class="icon-folder-open-alt"></i></h3> <br><hr>
         <strong>Total = {{collections.length}}</strong>
       </div>
         <div class='row justify-content-center'>

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Collectons = require('./collections.js')
+const Collections = require('./collections.js')
 
 const user_collection_data_schema = mongoose.Schema({
   created: {
@@ -18,8 +18,44 @@ const user_collection_data_schema = mongoose.Schema({
 const User_Collection_data = mongoose.model('user_collection_data', user_collection_data_schema)
 User_Collection_data.add_user_collection = add_user_collection
 User_Collection_data.get_collection_documents = get_collection_documents
+User_Collection_data.verify_owner_of_document = verify_owner_of_document
 
 module.exports = User_Collection_data
+
+async function get_document({document_id}) {
+  try {
+    let document = await User_Collection_data.findById(document_id)
+    if(!document) throw 'No document found'
+    return document
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    throw err
+  }
+}
+
+async function verify_owner_of_document({ document_id, user_id}){
+  try {
+    let document = await get_document({document_id})
+    let collections = await Collections.get_user_collections({ user_id })
+    // logger.log(collections)
+    logger.log(document.collection_id)
+    let index_of_document_id = collections.findIndex((col) => {
+      logger.log(col._id)
+      logger.log(document.collection_id)
+      logger.log(col._id.equals( document.collection_id))
+      return col._id.equals( document.collection_id)
+    })
+    logger.log(index_of_document_id)
+    if (index_of_document_id < 0) return false
+    return true
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    throw err
+
+  }
+}
 
 
 async function get_collection_documents({ collection_id }) {
