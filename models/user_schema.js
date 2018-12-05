@@ -14,7 +14,7 @@ const user_schema = mongoose.Schema({
     type: String,
     default: ''
   },
-  collections: [{ type: mongoose.Schema.Types.ObjectId, ref: "Collection", require: false }],
+  // collections: [{ type: mongoose.Schema.Types.ObjectId, ref: "Collection", require: false }],
 
 })
 module.exports = user_schema

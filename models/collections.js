@@ -141,28 +141,18 @@ async function edit_new_prop({
         }
       });
       if(prop_index < 0)throw `${old_prop_name} not found while trying to update property`
-      logger.log(prop_index)
       let prop_data = {[new_prop_name]: new_prop_type}
-      logger.log(prop_data)
-      logger.log('old'.green)
-      logger.log(collection.model[prop_index])
       collection.model[prop_index] = prop_data
-      logger.log('new'.green)
-      logger.log(collection.model[prop_index])
       collection.markModified('model')
       var saved = await collection.save()
       logger.log('saved'.green)
-
-      logger.log(saved)
-      let new_prop_obj = saved.model[prop_index]
-      return new_prop_obj
+      let new_model_obj = saved.model
+      return new_model_obj
     } catch (err) {
       logger.log('err'.bgRed)
       logger.log(err)
       throw err
     }
-
-
   }
 
 async function delete_model_prop({ collection_id, prop }) {

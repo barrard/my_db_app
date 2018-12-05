@@ -7,6 +7,7 @@ const user_collection_data_schema = mongoose.Schema({
     default: Date.now
   },
   data: {type:{}, required:true},
+  uploaded_file_names:[String],
   user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", require: true },
   collection_id: { type: mongoose.Schema.Types.ObjectId, ref: "Collection", require: true },
   collection_name:String,
@@ -16,7 +17,7 @@ const user_collection_data_schema = mongoose.Schema({
 })
 
 const User_Collection_data = mongoose.model('user_collection_data', user_collection_data_schema)
-User_Collection_data.add_user_collection = add_user_collection
+User_Collection_data.add_user_collection_data = add_user_collection_data
 User_Collection_data.get_collection_documents = get_collection_documents
 User_Collection_data.verify_owner_of_document = verify_owner_of_document
 
@@ -74,14 +75,14 @@ async function get_collection_documents({ collection_id }) {
 
 
 
-async function add_user_collection({ collection_id, collection_name, data, user_id }) {
+async function add_user_collection_data({uploaded_file_names, collection_id, collection_name, data, user_id }) {
   try {
     logger.log('Make the data with this data')
-    logger.log({ collection_id, collection_name, data, user_id})
+    logger.log({ collection_id, collection_name, data, user_id, uploaded_file_names})
     let verify = await verify_submited_document_is_comple({collection_id, data})
     if(!verify) throw 'Data verification failed'
     let new_user_data = new User_Collection_data({
-      collection_id, collection_name, data, user_id
+      collection_id, collection_name, data, user_id, uploaded_file_names
     })
     let saved_user_data = await new_user_data.save()
     if(!saved_user_data)throw 'Error saving user data'
@@ -110,8 +111,6 @@ async function verify_submited_document_is_comple({collection_id, data}){
         model_varified_data[prop] = data[prop]
       }
     });
-    logger.log(model_varified_data)
-    logger.log(model_varified_data)
     logger.log(model_varified_data)
     if(err_msg) throw err_msg
     return model_varified_data

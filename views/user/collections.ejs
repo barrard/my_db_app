@@ -6,6 +6,9 @@
 <script src="/js/components/collection_CRUD.js"></script>
 <script src="/js/components/collection_prop_edit_btns.js"></script>
 <script src="/js/components/collection_documents_table.js"></script>
+<script src="/js/components/collection_data_type_select.js"></script>
+<script src="/js/components/collection_img_uploader.js"></script>
+<script src="/js/components/common/add_new_collection_modal.js"></script>
 
 
 
@@ -13,8 +16,6 @@
   <div class='row justify-content-center'>
       <div class='col-sm-3'>
         <collection-list-view 
-          @collection_selected="set_selected_collection" 
-          :collections="collections" 
         />
       </div>
       <div class='col-sm-9'>
@@ -22,7 +23,6 @@
           <h1>Manage Collections</h1>
         </div>
           <collection-model-view
-            :selected_collection="selected_collection"
             @delete_collection="delete_collection"
             @add_model_property="add_model_property"
           />
@@ -30,13 +30,11 @@
   </div>
   <div class='row justify-content-center'>
     <collections-documents-table 
-    :selected_collection="selected_collection"
-    :collection_documents="collection_documents"
+
 
     />
   </div>
 
 </div>
 
-  <% include ./modals/add_new_collection %>
 

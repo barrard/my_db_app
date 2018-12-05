@@ -1,26 +1,27 @@
-
-
-const list_vue = Vue.component('collection-list-view', {
+const list_vue = Vue.component ('collection-list-view', {
   data: function () {
     return {
 
-    }
+    };
   },
   props: {
-    collections: Array
   },
-  mounted: function () {
-
+  mounted: function () {},
+  computed:{
+    collections(){
+      return store.state.collections
+    }
   },
 
-  template: /*html*/`
+  template: /*html*/ `
     <div>
       <div class='row justify-content-center'>
         <button 
           data-toggle="modal" 
           data-target=".new-collection-modal-lg" 
           type="button" class="btn btn-primary">
-          <i class="icon-plus"></i> New Collection
+            <i class="icon-plus"></i>
+            New Collection
         </button>
       </div>
       <div class='row justify-content-center'>
@@ -43,12 +44,11 @@ const list_vue = Vue.component('collection-list-view', {
     </div>
   `,
   methods: {
-    collection_selected(collection) {
-      this.$emit('collection_selected', collection)
-      console.log(collection)
-
-
+    collection_selected (collection) {
+      store.commit('set_selected_collection', collection)
+      // this.$emit ('collection_selected', collection);
+      console.log (collection);
     },
+  },
 
-  }
-})
+});

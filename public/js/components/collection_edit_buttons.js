@@ -1,13 +1,23 @@
 Vue.component('collection-edit-buttons', {
   data: function () {
     return {
-      edit_form: true,
+      edit_mode: false,
       create_data_form: true
     }
   },
   props: {
-    collection_id:String
     
+  },
+  computed:{
+    collection_id(){
+      return store.state.selected_collection.__id
+    },
+    edit_mode(){
+      return store.state.edit_mode
+    },
+    create_data_form(){
+      return store.state.create_data_form
+    }
   },
   mounted: function () {
 
@@ -23,10 +33,10 @@ Vue.component('collection-edit-buttons', {
             <i class="icon-trash"></i>
           </button>
           <button 
-            @click="toggle_edit_form" 
+            @click="toggle_edit_mode" 
             type="button" 
-            :class="edit_form ? 'btn-success' : 'btn-outline-info' " 
-            :title="edit_form ? 'Edit mode enabled' : 'Edit mode diabled' "
+            :class="edit_mode ? 'btn-success' : 'btn-outline-info' " 
+            :title="edit_mode ? 'Edit mode enabled' : 'Edit mode diabled' "
             class="btn">
             <i class="icon-cogs"></i>
 
@@ -49,15 +59,22 @@ Vue.component('collection-edit-buttons', {
   },
   methods: {
     toggle_create_data_form(){
-      this.create_data_form = !this.create_data_form
-      $(`#create_data_form`).toggleClass('minimize')
+      // this.create_data_form = !this.create_data_form
+      // $(`#create_data_form`).toggleClass('minimize')
+      // $(`#model_editing_form`).toggleClass('minimize')
       console.log(`minimize create_data_form`)
+      store.commit('toggle_create_data_mode')
+
     },
-    toggle_edit_form() {
-      this.edit_form = !this.edit_form
-      $(`#model_editing_form`).toggleClass('minimize')
+    toggle_edit_mode() {
+      // this.edit_mode = !this.edit_mode
+      // this.edit_mode ?
+      //   $(`#model_editing_form`).addClass('minimize'):  
+      //   $(`#model_editing_form`).removeClass('minimize')
+        
       console.log(`minimize model_editing_form`)
-      this.$emit('edit_mode', this.edit_form)
+      store.commit('toggle_edit_mode')
+      // this.$emit('edit_mode', this.edit_mode)
        
     },
     delete_collection(collection_id) {

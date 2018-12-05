@@ -4,11 +4,17 @@ Vue.component('collections-documents-table', {
     }
   },
   props: {
-    collection_documents:Array,selected_collection:Object
 
   },
 
   computed:{
+    collection_documents(){
+      return store.state.collection_documents
+
+    },
+    selected_collection(){
+      return store.state.selected_collection
+    },
     model_keys(){
       let keys = []
       this.selected_collection.model.forEach(prop_obj => {
@@ -60,7 +66,7 @@ Vue.component('collections-documents-table', {
 
   template: /*html*/`
     <div v-if="selected_collection" class="container">
-      <div class='row justify-content-center'>
+      <div class='row'>
         <table class="table">
           <thead>
             <tr>

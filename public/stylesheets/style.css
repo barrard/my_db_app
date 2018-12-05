@@ -19,14 +19,24 @@
 .relative{
   position: relative;
 }
+.absolute{
+  position: absolute;
+}
 .flex{
   display: flex;
 } 
 .inline{
   display: inline;
 }
+.inline-flex{
+  display: inline-flex;
+}
 .align-center{
   align-items: center;
+}
+.sq-md{
+  max-height:250px;
+  max-width:250px;
 }
 
 .prop-edit-btns{
@@ -36,6 +46,18 @@
   position: absolute;
   top: 0;
   right: 0;
+}
+.top{
+  top:0;
+}
+.bottom{
+  bottom: 0;
+}
+.right{
+  right:0
+}
+.off-screen{
+  display: none;
 }
 
 

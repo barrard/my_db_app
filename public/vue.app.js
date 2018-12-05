@@ -2,7 +2,18 @@
 console.log('app.js')
 const vue_app = new Vue({
   el: '#app',
-  data: $tore,
+  data: {
+    ...store
+
+  },
+  computed:{
+    collections(){
+      return store.state.collections
+    },
+    selected_collection(){
+      return store.state.selected_collection
+    }
+  },
   methods:{
     async submit_update_email() {
       try {
@@ -55,25 +66,27 @@ const vue_app = new Vue({
       }
 
     },
-    async set_selected_collection(selected_collection){
-      try {
-        console.log('collection selcteed')
-        this.selected_collection = selected_collection
-        console.log(this.selected_collection)
-        let collection_id = this.selected_collection._id
-        //get collection_documents
-        let resp = await $.get('/user/get_collection_documents', {
-          collection_id
-        })
-        if(resp.err)throw resp.err
-        $tore.collection_documents = resp.collection_documents
+    // async set_selected_collection(selected_collection){
+    //   try {
+    //     console.log('collection selcteed')
+    //     this.selected_collection = selected_collection
+    //     console.log(this.selected_collection)
+    //     let collection_id = this.selected_collection._id
+    //     $tore.model_input_values[this.selected_collection.collection_name] = {}
+    //     $tore.model_img[this.selected_collection.collection_name] = {}
+    //     //get collection_documents
+        // let resp = await $.get('/user/get_collection_documents', {
+        //   collection_id
+        // })
+    //     if(resp.err)throw resp.err
+    //     $tore.collection_documents = resp.collection_documents
 
-      } catch (err) {
-        console.log('err')
-        console.log(err)
-        toast({msg:err, type:'error'})
-      }
-    },
+    //   } catch (err) {
+    //     console.log('err')
+    //     console.log(err)
+    //     toast({msg:err, type:'error'})
+    //   }
+    // },
     async delete_collection(collection_id) {
       try {
         console.log(`delete_collection ${collection_id}`)
@@ -90,7 +103,7 @@ const vue_app = new Vue({
           //if there are no more items then cant set a new collection
           if (!this.collections ) return
           // set a new collection for the view
-          this.set_selected_collection(this.collections[index])
+          store.commit('set_selected_collection',this.collections[index])
 
 
         }
@@ -102,31 +115,7 @@ const vue_app = new Vue({
         
       }
     },
-    async send_create_collection(){
-      try {
-        let collection_name = this.new_collection_name
-        let add_starter_model = this.add_starter_model
-        let resp = await $.post('/user/add_new_collection',{ 
-          add_starter_model, collection_name, _csrf })
-        console.log(resp)
-        this.new_collection_name = ''
-        if(resp.err)throw resp.err
-        if(resp.new_collection){
-          this.collections.push(resp.new_collection)
-          let name = resp.new_collection.collection_name
-          toast({ msg: `Collection <strong>${name}</strong> added`, type: 'success' })
-          $('.new-collection-modal-lg').modal('hide')
-          $tore.selected_collection = resp.new_collection
 
-        }
-
-      } catch (err) {
-        console.log('err')
-        console.log(err)
-        $('#new_collection_name_input').addClass('is_invalid')
-        toast({msg:err, type:'error'})
-      }
-    },
   },
   async mounted(){
     //get user collections

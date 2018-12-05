@@ -1,12 +1,10 @@
 Vue.component('collection-model-view', {
   data: function () {
     return {
-      edit_mode:true
 
     }
   },
   props: {
-    selected_collection: Object
   },
   mounted: function () {
 
@@ -24,41 +22,37 @@ Vue.component('collection-model-view', {
             <div class="jumbotron jumbotron-fluid relative">
               <header class="top_right_btns">
                 <collection-edit-buttons
-                  :collection_id="selected_collection._id"
                   @delete_collection = "delete_collection"
-                  @edit_mode = "set_edit_mode"
                 />    
               </header>
 
               <div class="container-fluid">
                 <h1 class="display-4">{{selected_collection.collection_name}}</h1>
-                <create-read-update-delete id="create_data_form"
-                  :selected_collection="selected_collection"
-                  :edit_mode="edit_mode"
+                <create-read-update-delete 
      
                 />
                 <hr>
          
                 <model-editing-and-building 
-                  :selected_collection="selected_collection"
                   @add_model_property="add_model_property"
+
                 />
               </div>
             </div>
 
           </div>${/* v-else selected_collection = true */''}
-
+          <add-new-collection-modal />
         </div>
 
   `,
   computed: {
+    selected_collection(){
+      return store.state.selected_collection
+    }
  
   },
   methods: {
 
-    set_edit_mode(mode){
-      this.edit_mode = mode
-    },
     add_model_property({ new_model_property, new_model_property_type }) {
       this.$emit('add_model_property', { new_model_property, new_model_property_type })
     },

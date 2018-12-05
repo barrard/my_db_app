@@ -1,9 +1,12 @@
 var express = require('express');
 var router = express.Router();
+const formidable = require('formidable');
+const path = require('path')
 const RM = require('../../middleware/route_middleware.js')
 let User = require('../../models/user.js')
 const Collection = require('../../models/collections.js')
 const User_collection_data = require('../../models/user_collection_data.js')
+const User_file_uploads = require('../../models/user_file_uploads.js')
 
 
 
@@ -69,12 +72,12 @@ router.post('/edit_new_prop', [RM.ensure_user_collection], async function (req, 
       new_prop_name,
       new_prop_type
     })
-    let new_prop_obj = await Collection.edit_new_prop({
+    let new_model_obj = await Collection.edit_new_prop({
       collection_id,
       old_prop_name, old_prop_type,
       new_prop_name, new_prop_type
     })
-    res.send({ new_prop_obj })
+    res.send({ new_model_obj })
   } catch (err) {
     logger.log('err'.bgRed)
     logger.log(err)
@@ -101,17 +104,19 @@ router.get('/get_collection_documents', [RM.ensure_user_collection], async funct
 router.post('/submit_data_to_collection', [RM.ensure_user_collection], async function (req, res, next) {
   try {
     logger.log(req.body)
-    //remove _csrf, collection_id, collection_name
-    let data = { ...req.body }
+    //remove _csrf, collection_id, collection_name, uploaded_file_names
+    let data = JSON.parse(req.body.data)
+    let uploaded_file_names = JSON.parse(req.body.uploaded_file_names)
+    logger.log(data)
+    let { collection_id, collection_name} = req.body 
     let user_id = req.user._id
-    delete data._csrf
-    delete data.collection_id
-    delete data.collection_name
-
+    // delete data._csrf
+    // delete data.collection_id
+    // delete data.collection_name
+    let collection_data = {data, collection_id, collection_name, uploaded_file_names, user_id}
     if(!Object.keys(data).length)throw 'Data is empty'
 
-    let { collection_id, collection_name } = req.body
-    let new_user_collection_data = await User_collection_data.add_user_collection({ collection_id, collection_name, user_id, data })
+    let new_user_collection_data = await User_collection_data.add_user_collection_data(collection_data )
     res.send({ new_user_collection_data })
 
   } catch (err) {
@@ -201,6 +206,63 @@ router.post('/add_new_collection', async function (req, res, next) {
 });
 
 
+/* POST add a new collection */
+router.post('/upload_files', async function (req, res, next) {
+  try {
+    var user_id = req.user._id
+    var file_name
+    logger.log(req.body)
+    const form = new formidable.IncomingForm();
+    form.multiples = false;
+
+    form.uploadDir = path.join(__dirname, '../../public/user_files')
+      // every time a file has been uploaded successfully,
+  // rename it to it's orignal name
+  form.on('file', function (field, file) {
+    logger.log('field - ' + field + ' : file - ' + JSON.stringify(file));
+    let ext = file.name
+    const index = ext.lastIndexOf('.')
+        ext = ext.slice(index)
+    logger.log('whats the upload file?')
+    logger.log(file.path)
+    file_name = file.path.split('/')
+    file_name = file_name[file_name.length - 1]
+
+    //need to add it to the collection!
+    logger.log(file_name)
+    User_file_uploads.add_user_file_upload({user_id, file_name})
+
+
+
+
+    // resizeThisImage(file.path + ext)//TODO add Jimp
+  });
+    // log any errors that occur
+    form.on('error', function (err) {
+      logger.log('An error has occured: \n' + err);
+    });
+  
+    // once all the files have been uploaded, send a response to the client
+    form.on('end', function () {
+      logger.log('end')
+      res.send({file_name})
+  
+    });
+  
+    // parse the incoming request containing the form data
+    form.parse(req);
+    // logger.log(form)
+    logger.log(req.file)
+    logger.log(req.files)
+  
+    //
+
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    res.send({ err })
+  }
+});
 
 
 

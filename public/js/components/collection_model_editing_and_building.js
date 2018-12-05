@@ -10,7 +10,6 @@ let model_building_vue =  Vue.component('model-editing-and-building', {
     }
   },
   props: {
-    selected_collection:Object
 
   },
   mounted: function () {
@@ -20,7 +19,7 @@ let model_building_vue =  Vue.component('model-editing-and-building', {
 
   template: /*html*/`
 
-  <form id="model_editing_form">
+  <form v-if="edit_mode" id="model_editing_form">
     <div class='row justify-content-center'>
       <div class='col-sm-6'>
         <div class="form-group">
@@ -30,18 +29,9 @@ let model_building_vue =  Vue.component('model-editing-and-building', {
         </div>
       </div>
       <div class='col-sm-6'>
-        <div class="form-group">
-          <label for="property data type">Data Type</label>
-          <select id="new_property_data_type_select" v-model="new_model_property_type" class="custom-select">
-          <option value="" >Open this select menu</option>
-          <option 
-            v-for="type in data_types" 
-            :value="type">
-              {{type}}
-            </option>
-          </select> 
-          <small class="form-text text-muted">use String for any text data.  Number for integer values, Date for managing Dates.  Boolean is for data that is either True or False i.e. Instock, Discontinued</small>
-        </div>
+        <data-type-select 
+          @select="new_model_property_type_selected"
+        />
       </div>
     </div>
     <button 
@@ -54,9 +44,17 @@ let model_building_vue =  Vue.component('model-editing-and-building', {
 
   `,
   computed: {
-
+    selected_collection(){
+      return store.state.selected_collection
+    },
+    edit_mode(){
+      return store.state.edit_mode && store.state.create_data_form
+    }
   },
   methods: {
+    new_model_property_type_selected(type){
+      this.new_model_property_type = type
+    },
     add_model_property() {
       let new_model_property = this.new_model_property
       let new_model_property_type = this.new_model_property_type
@@ -66,7 +64,7 @@ let model_building_vue =  Vue.component('model-editing-and-building', {
       if(valid === true){
         this.$emit('add_model_property', { new_model_property, new_model_property_type })
         this.new_model_property = ''
-        this.new_model_property_type = ''
+        
       }else{
         toast({msg:`Invalid propety data <br> ${valid}`, type:'error'})
       }

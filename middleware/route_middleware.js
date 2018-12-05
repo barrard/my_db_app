@@ -6,21 +6,10 @@ module.exports = {
   async ensure_user_document(req, res, next){
     // if(true) return next()
     try {
-      let method = req.method
-      logger.log(method)
-      var document_id;
+      var document_id = get_document_id_from_req(req)
       const user_id = req.user._id
-      if (method == "POST") {
-        logger.log('POST')
-        document_id = req.body.document_id
-      }
-      if (method == "GET") {
-        logger.log('GET')
-        logger.log(req.query)
-        document_id = req.query.document_id
-      }
+
       // logger.log({collection_id, user_id})
-      if (!document_id) throw 'ERROR no document_id'
       //check this id beloings to a collection this user has
       let check = await User_collection_data.verify_owner_of_document({ document_id, user_id})
       if (!check) throw 'Not this user collection'
@@ -53,21 +42,9 @@ module.exports = {
   },
   async ensure_user_collection(req, res, next){
     try {
-      let method = req.method
-      logger.log(method)
-      var collection_id;
+      var collection_id = get_collection_id_from_req(req)
       const user_id = req.user._id
-      if (method == "POST") {
-        logger.log('POST')
-        collection_id = req.body.collection_id
-      }
-      if (method == "GET") {
-        logger.log('GET')
-        logger.log(req.query)
-        collection_id = req.query.collection_id
-      }
-      // logger.log({collection_id, user_id})
-      if (!collection_id) throw 'ERROR'
+      
       //check this id beloings to a collection this user has
       let check = await Collection.verify_owner_of_collection({ collection_id, user_id})
       if (!check) throw 'Not this user collection'
@@ -79,4 +56,42 @@ module.exports = {
       res.send({err:'Cannot use this collection'})
     }
   }
+}
+
+
+
+function get_collection_id_from_req(req){
+    var collection_id = get_item_from_req(req, 'collection_id')
+
+    if (!collection_id) throw 'ERROR no collection_id'
+
+    return collection_id
+
+}
+
+function get_document_id_from_req(req){
+    var document_id = get_item_from_req(req, 'document_id')
+
+    if (!document_id) throw 'ERROR no document_id'
+    return document_id
+  
+}
+
+function get_item_from_req(req, item){
+  var item_id;
+  logger.log(item)
+  let method = req.method
+  if (method == "POST") {
+    logger.log('POST')
+    item_id = req.body[item]
+  }
+  if (method == "GET") {
+    logger.log('GET')
+    logger.log(req.query)
+    item_id = req.query[item]
+  }
+  logger.log(item_id)
+
+  if(!item_id) throw `Couldnt find ${item}`
+  return item_id
 }

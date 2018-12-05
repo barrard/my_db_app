@@ -32,27 +32,34 @@ Vue.component('prop-edit-btns', {
 
   `,
   computed: {
+    collection_id(){
+      return store.state.selected_collection._id
+    },
+    collection_name(){
+      return store.state.selected_collection.collection_name
+    },
 
   },
   methods: {
     async delete_prop() {
       let prop = this.prop
-      let collection_id = $tore.selected_collection._id
       console.log(`Delete ${prop}`)
       let confirm = window.confirm(`Are you sure you sure you want to delete ${this.prop}?`)
-      // if (confirm) this.$emit('delete_prop', collection_id)
       if (confirm) {
         try {
+          let collection_id= this.collection_id
           console.log('$tore.selected_collection.model')
           let resp = await $.post('/user/delete_model_prop', {
             _csrf, prop, collection_id
           })
           if (resp.err || !resp.model) throw `Error deleting ${prop} from model`
           toast({ msg: `Deleted ${prop} from the data model`, type:'success' })
-          $tore.selected_collection.model = resp.model
+          //delete the prop from the data
+          store.commit('delete_prop', this.collection_name, prop )
+          store.commit('set_new_model_data', resp.model )
         } catch (err) {
-          logger.log('err'.bgRed)
-          logger.log(err)
+          console.log('err'.bgRed)
+          console.log(err)
           toast({msg:err, type:'error'})
         }
 
