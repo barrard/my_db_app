@@ -23,8 +23,8 @@ const use_middleware = require('./middleware/use.js')
 
 
 const indexRouter = require('./routes/index.js');
-const userRouter = require('./routes/user/index.js');
-const authRouter = require('./routes/auth/index.js');
+const userRouter = require('./routes/user/user_routes.js');
+const authRouter = require('./routes/auth/auth_routes.js');
 const apiRouter = require('./routes/api.js');
 
 

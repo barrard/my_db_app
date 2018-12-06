@@ -47,8 +47,20 @@ router.post('/trash_document', [RM.ensure_user_document], async function(req, re
 
 router.post('/edit_document', [RM.ensure_user_document], async function(req, res, next){
   try {
-    logger.log('TEST')
-    res.send('test')
+    logger.log(req.body)
+    //remove _csrf, collection_id, collection_name, uploaded_file_names
+    let data = JSON.parse(req.body.data)
+    logger.log(data)
+    let { collection_id} = data 
+    // delete data._csrf
+    // delete data.collection_id
+    // delete data.collection_name
+    let collection_data = {data, collection_id}
+    if(!Object.keys(data).length)throw 'Data is empty'
+
+    let new_user_collection_data = await User_collection_data.edit_user_collection_data(collection_data )
+      logger.log(new_user_collection_data)
+    res.send({new_user_collection_data})
     
   } catch (err) {
     logger.log('err'.bgRed)

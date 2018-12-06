@@ -20,6 +20,7 @@ const User_Collection_data = mongoose.model('user_collection_data', user_collect
 User_Collection_data.add_user_collection_data = add_user_collection_data
 User_Collection_data.get_collection_documents = get_collection_documents
 User_Collection_data.verify_owner_of_document = verify_owner_of_document
+User_Collection_data.edit_user_collection_data = edit_user_collection_data
 
 module.exports = User_Collection_data
 
@@ -74,12 +75,34 @@ async function get_collection_documents({ collection_id }) {
 }
 
 
+async function edit_user_collection_data({collection_id, data }) {
+  try {
+    logger.log({ collection_id, data})
+    // let verify = await verify_submited_document_is_complete({collection_id, data})
+    // if(!verify) throw 'Data verification failed'
+
+    let updated_data = await User_Collection_data.findOneAndUpdate(collection_id, {
+      $set:{data:data}
+    }, {new:true})
+    // let updated_data = await User_Collection_data.findOneAndUpdate(collection_id)
+      logger.log(updated_data)
+    if(!updated_data)throw 'Error saving user data'
+    return data
+    
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    throw err
+  }
+
+}
+
 
 async function add_user_collection_data({uploaded_file_names, collection_id, collection_name, data, user_id }) {
   try {
     logger.log('Make the data with this data')
     logger.log({ collection_id, collection_name, data, user_id, uploaded_file_names})
-    let verify = await verify_submited_document_is_comple({collection_id, data})
+    let verify = await verify_submited_document_is_complete({collection_id, data})
     if(!verify) throw 'Data verification failed'
     let new_user_data = new User_Collection_data({
       collection_id, collection_name, data, user_id, uploaded_file_names
@@ -97,7 +120,7 @@ async function add_user_collection_data({uploaded_file_names, collection_id, col
 }
 
 
-async function verify_submited_document_is_comple({collection_id, data}){
+async function verify_submited_document_is_complete({collection_id, data}){
   try {
     var model = await Collections.get_model({ collection_id })
     logger.log(model)

@@ -17,6 +17,10 @@ store = new Vuex.Store({
 
   },
   mutations: {
+    update_collection_data(state, {prop_name, value, index}){
+      state.collection_documents[index].data[prop_name] = value
+
+    },
     remove_img(state, uploaded_file_name){
       let file_index = state.uploaded_file_names.findIndex((file)=>{
         return uploaded_file_name == file
