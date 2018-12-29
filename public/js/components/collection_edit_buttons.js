@@ -9,8 +9,11 @@ Vue.component('collection-edit-buttons', {
     
   },
   computed:{
+    selected_collection(){  
+      return store.state.selected_collection.collection_name
+    },
     collection_id(){
-      return store.state.selected_collection.__id
+      return store.state.selected_collection._id
     },
     edit_mode(){
       return store.state.edit_mode
@@ -49,14 +52,10 @@ Vue.component('collection-edit-buttons', {
             class="btn">
             <i class="icon-code"></i>
           </button>
-  
-
 
           </div>
   `,
-  computed: {
-    
-  },
+
   methods: {
     toggle_create_data_form(){
       // this.create_data_form = !this.create_data_form

@@ -34,9 +34,13 @@ router.get('/', (req, res) => {
 // });
 router.post('/trash_document', [RM.ensure_user_document], async function(req, res, next){
   try {
+    logger.log(req.body)
+    let { document_id } = req.body
     logger.log('TEST')
-    res.send('test')
-    
+    logger.log(document_id)
+    let deleted_document = await User_collection_data.delete_user_collection_data({document_id})
+    res.send({deleted_document})
+
   } catch (err) {
     logger.log('err'.bgRed)
     logger.log(err)
@@ -45,21 +49,39 @@ router.post('/trash_document', [RM.ensure_user_document], async function(req, re
 
 });
 
+router.post('/trash_document_file', [RM.ensure_user_document], async function(req, res, next){
+  try {
+    logger.log(req.body)
+    let { document_id, file_name } = req.body
+    logger.log('TEST')
+    logger.log(document_id)
+    let deleted_document_file = await User_collection_data.delete_user_collection_data_file({document_id, file_name})
+    res.send({deleted_document_file})
+
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    res.send({ err })
+  }
+
+});
+
+
 router.post('/edit_document', [RM.ensure_user_document], async function(req, res, next){
   try {
     logger.log(req.body)
     //remove _csrf, collection_id, collection_name, uploaded_file_names
     let data = JSON.parse(req.body.data)
     logger.log(data)
-    let { collection_id} = data 
+    let { document_id} = req.body 
     // delete data._csrf
-    // delete data.collection_id
+    // delete data.document_id
     // delete data.collection_name
-    let collection_data = {data, collection_id}
+    let collection_data = {data, document_id}
     if(!Object.keys(data).length)throw 'Data is empty'
 
     let new_user_collection_data = await User_collection_data.edit_user_collection_data(collection_data )
-      logger.log(new_user_collection_data)
+    logger.log(new_user_collection_data)
     res.send({new_user_collection_data})
     
   } catch (err) {

@@ -10,7 +10,7 @@ Vue.component('add-new-collection-modal', {
   },
   props: {
   },
-  mounted: function () {
+  mounted() {
 
   },
 

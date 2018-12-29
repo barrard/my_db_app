@@ -78,6 +78,31 @@ store = new Vuex.Store({
       state.collections.push(new_collection)
 
     },
+    trash_user_document(state, document_id) {
+      console.log(document_id)
+      let collection_data = state.collection_documents.filter((data) => {
+        console.log(data)
+        return data._id != document_id
+      })
+      state.collection_documents = collection_data
+    },
+
+    trash_user_document_file(state, {document_id, file_name}) {
+      console.log(document_id)
+      let collection_data = state.collection_documents.map((data) => {
+        console.log(data)
+        if(data._id != document_id) return data
+        else{
+          let file_names = data.uploaded_file_names.filter((_file_name)=>{
+            return _file_name != file_name
+          })
+          data.uploaded_file_names = file_names
+          return data
+        }
+      })
+      state.collection_documents = collection_data
+    },
+
     async set_selected_collection(state, selected_collection){
       state.selected_collection = selected_collection
       this.commit('set_collection_model_input_obj', selected_collection.collection_name)
