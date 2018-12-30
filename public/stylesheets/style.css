@@ -1,7 +1,9 @@
 .text-align-center{
   text-align: center
 }
-
+.keep-whitespace {
+  white-space: pre-wrap
+}
 .clickable:hover{
   cursor: pointer;
   box-shadow: inset 0 0 10px goldenrod;
@@ -31,12 +33,19 @@
 .inline-flex{
   display: inline-flex;
 }
+.h-center{
+  justify-content: center;
+}
 .align-center{
   align-items: center;
 }
-.sq-md{
-  max-height:250px;
-  max-width:250px;
+.sq-md {
+  max-height: 250px;
+  max-width: 250px;
+}
+.sq-sm {
+  max-height: 100px;
+  max-width: 100px;
 }
 
 .prop-edit-btns{

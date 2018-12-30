@@ -6,6 +6,10 @@ const user_collection_data_schema = mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  deleted: {
+    type: Boolean,
+    default: false
+  },
   data: {type:{}, required:true},
   uploaded_file_names:[String],
   user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", require: true },
@@ -21,6 +25,8 @@ User_Collection_data.add_user_collection_data = add_user_collection_data
 User_Collection_data.get_collection_documents = get_collection_documents
 User_Collection_data.verify_owner_of_document = verify_owner_of_document
 User_Collection_data.edit_user_collection_data = edit_user_collection_data
+User_Collection_data.delete_user_collection_data = delete_user_collection_data
+User_Collection_data.delete_user_collection_data_file = delete_user_collection_data_file
 
 module.exports = User_Collection_data
 
@@ -43,9 +49,9 @@ async function verify_owner_of_document({ document_id, user_id}){
     // logger.log(collections)
     logger.log(document.collection_id)
     let index_of_document_id = collections.findIndex((col) => {
-      logger.log(col._id)
-      logger.log(document.collection_id)
-      logger.log(col._id.equals( document.collection_id))
+      // logger.log(col._id)
+      // logger.log(document.collection_id)
+      // logger.log(col._id.equals( document.collection_id))
       return col._id.equals( document.collection_id)
     })
     logger.log(index_of_document_id)
@@ -62,7 +68,7 @@ async function verify_owner_of_document({ document_id, user_id}){
 
 async function get_collection_documents({ collection_id }) {
   try {
-    let collection_data = await User_Collection_data.find({collection_id})
+    let collection_data = await User_Collection_data.find({collection_id, deleted: { $ne: true }})
     if(!collection_data) throw 'Cannot find any colelction data'
     return collection_data
     
@@ -75,24 +81,66 @@ async function get_collection_documents({ collection_id }) {
 }
 
 
-async function edit_user_collection_data({collection_id, data }) {
+async function edit_user_collection_data({document_id, data }) {
   try {
-    logger.log({ collection_id, data})
-    // let verify = await verify_submited_document_is_complete({collection_id, data})
+    logger.log({ document_id, data})
+    // let verify = await verify_submited_document_is_complete({document_id, data})
     // if(!verify) throw 'Data verification failed'
 
-    let updated_data = await User_Collection_data.findOneAndUpdate(collection_id, {
-      $set:{data:data}
-    }, {new:true})
-    // let updated_data = await User_Collection_data.findOneAndUpdate(collection_id)
-      logger.log(updated_data)
-    if(!updated_data)throw 'Error saving user data'
-    return data
+    let user_document = await User_Collection_data.findById(document_id)
+    user_document.data = data
+    user_document.markModified('data')
+    let saved = await user_document.save()
+    // let user_document = await User_Collection_data.findOneAndUpdate(document_id)
+      logger.log(user_document)
+    if(!user_document)throw 'Error saving user data'
+    return saved
     
   } catch (err) {
     logger.log('err'.bgRed)
     logger.log(err)
     throw err
+  }
+
+}
+
+
+async function delete_user_collection_data({ document_id }) {
+  try {
+    logger.log(document_id)
+    let document = await User_Collection_data.findByIdAndUpdate(document_id, {
+      $set: {
+        deleted: true
+      }
+    })
+    // logger.log('collections')
+    // logger.log(collections)
+    if (!document) throw 'Error deleting Document'
+    return true
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    throw 'Error deleting Document'
+  }
+
+}
+
+async function delete_user_collection_data_file({ document_id, file_name }) {
+  try {
+    logger.log(document_id, file_name)
+    let document = await User_Collection_data.findByIdAndUpdate(document_id, {
+      $pull: {
+        uploaded_file_names: file_name
+      }
+    })
+    // logger.log('collections')
+    // logger.log(collections)
+    if (!document) throw 'Error deleting Document'
+    return true
+  } catch (err) {
+    logger.log('err'.bgRed)
+    logger.log(err)
+    throw 'Error deleting Document'
   }
 
 }
