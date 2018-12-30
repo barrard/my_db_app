@@ -80,6 +80,7 @@ store = new Vuex.Store({
     },
     async set_selected_collection(state, selected_collection){
       state.selected_collection = selected_collection
+      console.log(store.state.selected_collection._id)
       this.commit('set_collection_model_input_obj', selected_collection.collection_name)
       console.log('SET SELECTED COLLECTION '+selected_collection)
       try {

@@ -114,8 +114,8 @@ Vue.component('edit-data-input', {
 
     date_check(val, prop_name) {
       console.log(`set this prop ${prop_name} ${val} to this date ${new Date().toJSON().slice(0, 19)}`)
-      $(`#_input_${prop_name}`).val(new Date().toJSON().slice(0, 19))
-      document.getElementById(`_input_${prop_name}`).dispatchEvent(new Event("input"))
+      $(`#_edit_data_input_${prop_name}`).val(new Date().toJSON().slice(0, 19))
+      document.getElementById(`_edit_data_input_${prop_name}`).dispatchEvent(new Event("input"))
 
     },
   }

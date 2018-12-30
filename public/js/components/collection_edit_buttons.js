@@ -10,7 +10,7 @@ Vue.component('collection-edit-buttons', {
   },
   computed:{
     collection_id(){
-      return store.state.selected_collection.__id
+      return store.state.selected_collection._id
     },
     edit_mode(){
       return store.state.edit_mode
@@ -20,6 +20,8 @@ Vue.component('collection-edit-buttons', {
     }
   },
   mounted: function () {
+    console.log(this.collection_id)
+    console.log(this.edit_mode)
 
   },
 
@@ -78,6 +80,7 @@ Vue.component('collection-edit-buttons', {
        
     },
     delete_collection(collection_id) {
+      console.log(this.collection_id)
       let confirm = window.confirm('Are you sure you sure you want to delete this collections?')
       if (confirm) this.$emit('delete_collection', collection_id)
     },
