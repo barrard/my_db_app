@@ -139,6 +139,7 @@ router.post('/submit_data_to_collection', [RM.ensure_user_collection], async fun
   try {
     logger.log(req.body)
     //remove _csrf, collection_id, collection_name, uploaded_file_names
+    if(!req.body.data)res.send({err:'Sorry data not received'})
     let data = JSON.parse(req.body.data)
     let uploaded_file_names = JSON.parse(req.body.uploaded_file_names)
     logger.log(data)
