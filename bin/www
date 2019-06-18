@@ -3,6 +3,8 @@
 /**
  * Module dependencies.
  */
+require('dotenv').config({ path: '/home/dave/code/my_db_app/.env' })
+
 
 var app = require('../app');
 var debug = require('debug')('basic-login-express-app:server');

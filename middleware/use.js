@@ -16,6 +16,8 @@ const csurf = require('csurf');
 
 module.exports = (app)=>{
   app.use(helmet())
+  app.enable("trust proxy");
+
 
   app.use(morgan('dev'));
   app.use(express.json());
