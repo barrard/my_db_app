@@ -89,6 +89,7 @@ Vue.component('create-read-update-delete', {
     },  
 
     async submit_verified_data(data) {
+      let data = data
       try {
         console.log(data)
         var data = JSON.stringify(data)
