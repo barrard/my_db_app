@@ -88,45 +88,6 @@ Vue.component('create-read-update-delete', {
       $('#file_input').click()
     },  
 
-    async submit_verified_data(data) {
-      try {
-        console.log(data)
-        var data = JSON.stringify(data)
-        let collection_id = this.selected_collection._id
-        let collection_name = this.selected_collection.collection_name
-        let uploaded_file_names = JSON.stringify(this.uploaded_file_names)
-        console.log({ data, collection_id, collection_name })
-        let collection_data = {
-          data, collection_id, collection_name, uploaded_file_names
-        }
-        let resp = await $.ajax({
-          url:'/user/submit_data_to_collection',
-          type:'POST',
-          beforeSend: function (request) {
-            request.setRequestHeader('csrf-token', _csrf);
-          },
-          // data:JSON.stringify(collection_data)
-          data:(collection_data)
-        },)
-        console.log(resp)
-        if(resp.err)throw resp.err
-        toast({msg:'Data submited succesfully', type:'success'})
-        store.commit('add_new_collection_data', resp.new_user_collection_data);
-        // RESET FORM???
-        setTimeout(() => {
-          store.commit('reset_collection_model_data');
-          
-        }, 200);
-        // $tore.collection_documents.push(resp.new_user_collection_data)
-        // $tore.model_input_values[$tore.selected_collection.collection_name] = {}
-        // $tore.model_img[$tore.selected_collection.collection_name] = {}
-      } catch (err) {
-        console.log('err'.bgRed)
-        console.log(err)
-        toast({msg:err, type:'error'})
-        toast({msg:`DEBUG: - ${data}`, type:'info'})
-      }
-    },
     verify_data() {
       //Get all values from the form
       const inputs = document.querySelectorAll('[id^=_input]')
@@ -163,9 +124,52 @@ Vue.component('create-read-update-delete', {
       if (err_msg) {
         return toast({ msg: err_msg, type: 'error' })
       }
-      this.submit_verified_data(data)
-
+      this.submit_verified_data((data))
     },
+
+    async submit_verified_data(verified_data) {
+     
+      try {
+
+        var data = JSON.stringify(verified_data)
+        let collection_id = this.selected_collection._id
+        let collection_name = this.selected_collection.collection_name
+        let uploaded_file_names = JSON.stringify(this.uploaded_file_names)
+        console.log({ data, collection_id, collection_name })
+        let collection_data = {
+          data, collection_id, collection_name, uploaded_file_names
+        }
+        let resp = await $.ajax({
+          url:'/user/submit_data_to_collection',
+          type:'POST',
+          beforeSend: function (request) {
+            request.setRequestHeader('csrf-token', _csrf);
+          },
+          // data:JSON.stringify(collection_data)
+          data:(collection_data)
+        },)
+        console.log(resp)
+        if(resp.err)throw resp.err
+        toast({msg:'Data submited succesfully', type:'success'})
+        store.commit('add_new_collection_data', resp.new_user_collection_data);
+        // RESET FORM???
+        setTimeout(() => {
+          store.commit('reset_collection_model_data');
+          
+        }, 200);
+        // $tore.collection_documents.push(resp.new_user_collection_data)
+        // $tore.model_input_values[$tore.selected_collection.collection_name] = {}
+        // $tore.model_img[$tore.selected_collection.collection_name] = {}
+      } catch (err) {
+        alert(err)
+        console.log('err'.bgRed)
+        console.log(err)
+        // toast({msg:err, type:'error'})
+        // toast({msg:dd.toString(), type:'info'})
+        alert(dd)
+      }
+    },
+
     delete_collection(collection_id) {
       this.$emit('delete_collection', collection_id)
     },
