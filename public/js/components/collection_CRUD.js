@@ -123,7 +123,8 @@ Vue.component('create-read-update-delete', {
       } catch (err) {
         console.log('err'.bgRed)
         console.log(err)
-        toast({msg:err, type:'error'})
+        toast({msg:err, type:'success'})
+        toast({msg:`DEBUG: - ${data}`, type:'info'})
       }
     },
     verify_data() {
