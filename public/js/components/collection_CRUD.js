@@ -89,7 +89,6 @@ Vue.component('create-read-update-delete', {
     },  
 
     async submit_verified_data(data) {
-      let data = data
       try {
         console.log(data)
         var data = JSON.stringify(data)
@@ -125,7 +124,7 @@ Vue.component('create-read-update-delete', {
         console.log('err'.bgRed)
         console.log(err)
         toast({msg:err, type:'success'})
-        toast({msg:`DEBUG: - ${data}`, type:'info'})
+        // toast({msg:`DEBUG: - ${data}`, type:'info'})
       }
     },
     verify_data() {
